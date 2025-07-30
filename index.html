@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Refúgio das Flores - Sistema de Gestão</title>
-    <script
-      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
-      defer
-    ></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
@@ -263,6 +265,12 @@
         border: 1px solid #f5c6cb;
       }
 
+      .alert-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+
       .ingredient-item {
         display: flex;
         align-items: center;
@@ -278,6 +286,14 @@
         padding: 0.5rem;
         border: 1px solid #e1e5e9;
         border-radius: 4px;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .mb-4 {
+        margin-bottom: 1.5rem;
       }
     </style>
   </head>
@@ -402,7 +418,12 @@
           <h2 class="card-title">Controle de Estoque</h2>
 
           <div class="card">
-            <h3>Adicionar/Editar Matéria-Prima</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3>Adicionar/Editar Matéria-Prima</h3>
+              <button @click="forceRefresh()" class="btn btn-primary" style="font-size: 0.8rem;">
+                🔄 Atualizar Lista
+              </button>
+            </div>
             <form @submit.prevent="saveStock()">
               <div
                 style="
@@ -482,7 +503,12 @@
           <h2 class="card-title">Cadastro de Produtos</h2>
 
           <div class="card">
-            <h3>Adicionar/Editar Produto</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3>Adicionar/Editar Produto</h3>
+              <button @click="forceRefresh()" class="btn btn-primary" style="font-size: 0.8rem;">
+                🔄 Atualizar Lista
+              </button>
+            </div>
             <form @submit.prevent="saveProduct()">
               <div class="form-group">
                 <label>Nome do Produto</label>
@@ -989,6 +1015,21 @@
     </div>
 
     <script>
+      // Config do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZva2fJCqsNx24pWlkmBAVAZetBFvO3Rc",
+        authDomain: "refugio-das-flores-a9e11.firebaseapp.com",
+        projectId: "refugio-das-flores-a9e11",
+        storageBucket: "refugio-das-flores-a9e11.firebasestorage.app",
+        messagingSenderId: "689639393299",
+        appId: "1:689639393299:web:8f438802e7f3f8c86e97e6",
+        measurementId: "G-Z545Q41PJM",
+      };
+
+      // Inicializar Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
       function flowerShopApp() {
         return {
           // Estado da aplicação
@@ -1045,7 +1086,11 @@
 
           // Inicialização
           async init() {
-            await this.loadData();
+            console.log("Inicializando aplicação...");
+            // Aguarda um pouco para garantir que o Firebase está pronto
+            setTimeout(() => {
+              this.loadData();
+            }, 500);
           },
 
           // Autenticação
@@ -1094,7 +1139,68 @@
           async logout() {
             this.user = null;
             this.loginData = { username: "", password: "" };
+            // Limpar dados ao fazer logout
+            this.stock = [];
+            this.products = [];
+            this.sales = [];
+            this.expenses = [];
           },
+
+          // Carregamento de dados
+          async loadData() {
+            try {
+              // Listener para estoque
+              db.collection("stock").onSnapshot(snapshot => {
+               this.stock = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+               this.$nextTick(() => {
+                  // Força a reatividade do Alpine.js
+                  this.stock = [...this.stock];
+                });
+              });
+
+              // Listener para produtos
+              db.collection("products").onSnapshot(snapshot => {
+                console.log("Products data updated:", snapshot.docs.length);
+                this.products = snapshot.docs.map(doc => ({ 
+                  id: doc.id, 
+                  ...doc.data() 
+                }));
+                this.$nextTick(() => {
+                  this.products = [...this.products];
+                });
+              });
+
+              // Listener para vendas
+              db.collection("sales").onSnapshot(snapshot => {
+                console.log("Sales data updated:", snapshot.docs.length);
+                this.sales = snapshot.docs.map(doc => ({ 
+                  id: doc.id, 
+                  ...doc.data() 
+                }));
+                this.$nextTick(() => {
+                  this.sales = [...this.sales];
+                });
+              });
+
+              // Listener para despesas
+              db.collection("expenses").onSnapshot(snapshot => {
+                console.log("Expenses data updated:", snapshot.docs.length);
+                this.expenses = snapshot.docs.map(doc => ({ 
+                  id: doc.id, 
+                  ...doc.data() 
+                }));
+                this.$nextTick(() => {
+                  this.expenses = [...this.expenses];
+                });
+              });
+            } catch (error) {
+              console.error("Erro ao carregar dados:", error);
+              // Fallback para dados locais se Firebase falhar
+            
+            }
+          },
+
 
           // Métodos para reset de formulários
           editStock(item) {
@@ -1129,87 +1235,89 @@
             };
           },
 
-          // Gestão de Estoque com localStorage
+          // Gestão de Estoque
           async saveStock() {
             try {
+              console.log("Salvando estoque:", this.stockForm);
+              
               if (this.stockForm.id) {
-                const index = this.stock.findIndex(
-                  (item) => item.id === this.stockForm.id
-                );
-                if (index !== -1) {
-                  this.stock[index] = {
-                    ...this.stock[index],
-                    name: this.stockForm.name,
-                    quantity: parseFloat(this.stockForm.quantity),
-                  };
-                }
-              } else {
-                const newItem = {
-                  id: Date.now().toString(),
+                // Atualizar item existente
+                await db.collection("stock").doc(this.stockForm.id).update({
                   name: this.stockForm.name,
-                  quantity: parseFloat(this.stockForm.quantity),
-                };
-                this.stock.push(newItem);
+                  quantity: parseFloat(this.stockForm.quantity)
+                });
+                console.log("Estoque atualizado com sucesso");
+              } else {
+                // Adicionar novo item
+                const docRef = await db.collection("stock").add({
+                  name: this.stockForm.name,
+                  quantity: parseFloat(this.stockForm.quantity)
+                });
+                console.log("Novo item de estoque adicionado com ID:", docRef.id);
               }
-
-              this.saveToLocalStorage("stock", this.stock);
+              
               this.resetStockForm();
+              alert("Item salvo com sucesso!");
             } catch (error) {
               console.error("Erro ao salvar estoque:", error);
+              alert("Erro ao salvar. Tente novamente.");
             }
           },
 
           async deleteStock(id) {
             if (confirm("Tem certeza que deseja excluir este item?")) {
-              this.stock = this.stock.filter((item) => item.id !== id);
-              this.saveToLocalStorage("stock", this.stock);
+              try {
+                await db.collection("stock").doc(id).delete();
+              } catch (error) {
+                console.error("Erro ao excluir estoque:", error);
+              }
             }
           },
 
-          // Gestão de Produtos com localStorage
+          // Gestão de Produtos
           async saveProduct() {
             try {
+              console.log("Salvando produto:", this.productForm);
+              
               if (this.productForm.id) {
-                const index = this.products.findIndex(
-                  (product) => product.id === this.productForm.id
-                );
-                if (index !== -1) {
-                  this.products[index] = {
-                    ...this.products[index],
-                    name: this.productForm.name,
-                    price: parseFloat(this.productForm.price),
-                    ingredients: this.productForm.ingredients.map((ing) => ({
-                      stockId: ing.stockId,
-                      quantity: parseFloat(ing.quantity),
-                    })),
-                  };
-                }
-              } else {
-                const newProduct = {
-                  id: Date.now().toString(),
+                // Atualizar produto existente
+                await db.collection("products").doc(this.productForm.id).update({
                   name: this.productForm.name,
                   price: parseFloat(this.productForm.price),
-                  ingredients: this.productForm.ingredients.map((ing) => ({
+                  ingredients: this.productForm.ingredients.map(ing => ({
                     stockId: ing.stockId,
-                    quantity: parseFloat(ing.quantity),
-                  })),
-                };
-                this.products.push(newProduct);
+                    quantity: parseFloat(ing.quantity)
+                  }))
+                });
+                console.log("Produto atualizado com sucesso");
+              } else {
+                // Adicionar novo produto
+                const docRef = await db.collection("products").add({
+                  name: this.productForm.name,
+                  price: parseFloat(this.productForm.price),
+                  ingredients: this.productForm.ingredients.map(ing => ({
+                    stockId: ing.stockId,
+                    quantity: parseFloat(ing.quantity)
+                  }))
+                });
+                console.log("Novo produto adicionado com ID:", docRef.id);
               }
-
-              this.saveToLocalStorage("products", this.products);
+              
               this.resetProductForm();
+              alert("Produto salvo com sucesso!");
             } catch (error) {
               console.error("Erro ao salvar produto:", error);
+              alert("Erro ao salvar produto. Tente novamente.");
             }
           },
 
           async deleteProduct(id) {
             if (confirm("Tem certeza que deseja excluir este produto?")) {
-              this.products = this.products.filter(
-                (product) => product.id !== id
-              );
-              this.saveToLocalStorage("products", this.products);
+              try {
+                await db.collection("products").doc(id).delete();
+              } catch (error) {
+                console.error("Erro ao excluir produto:", error);
+              }
             }
           },
 
@@ -1242,18 +1350,19 @@
             }
 
             try {
-              // Atualizar estoque
+              // Atualizar estoque no Firebase
               for (const ingredient of product.ingredients) {
-                const stockIndex = this.stock.findIndex(
+                const stockItem = this.stock.find(
                   (s) => s.id === ingredient.stockId
                 );
-                if (stockIndex !== -1) {
-                  this.stock[stockIndex].quantity -=
-                    ingredient.quantity * quantity;
+                if (stockItem) {
+                  const newQuantity = stockItem.quantity - (ingredient.quantity * quantity);
+                  await db.collection("stock").doc(stockItem.id).update({
+                    quantity: newQuantity
+                  });
                 }
               }
 
-              this.saveToLocalStorage("stock", this.stock);
               this.productionForm = { productId: "", quantity: 1 };
               alert(
                 `${quantity} unidade(s) de ${product.name} produzida(s) com sucesso!`
@@ -1267,59 +1376,66 @@
           // Financeiro
           async recordSale() {
             try {
-              const product = this.products.find(
-                (p) => p.id === this.saleForm.productId
-              );
+              const product = this.products.find(p => p.id === this.saleForm.productId);
               if (!product) return;
 
               const quantity = parseInt(this.saleForm.quantity);
               const total = product.price * quantity;
 
-              const saleData = {
-                id: Date.now().toString(),
-                productId: this.saleForm.productId,
+              // Verificar e atualizar estoque
+              for (let ing of product.ingredients) {
+                const stockItem = this.stock.find(s => s.id === ing.stockId);
+                if (!stockItem) continue;
+
+                const requiredQty = ing.quantity * quantity;
+
+                if (stockItem.quantity < requiredQty) {
+                  alert(`Estoque insuficiente para ${stockItem.name}`);
+                  return;
+                }
+
+                await db.collection("stock").doc(stockItem.id).update({
+                  quantity: stockItem.quantity - requiredQty
+                });
+              }
+
+              // Registrar a venda no Firestore
+              await db.collection("sales").add({
+                productId: product.id,
                 productName: product.name,
                 quantity: quantity,
                 unitPrice: product.price,
                 total: total,
                 customer: this.saleForm.customer || "Cliente não informado",
-                date: new Date(),
-                type: "sale",
-              };
-
-              this.sales.push(saleData);
-              this.saveToLocalStorage("sales", this.sales);
+                date: new Date()
+              });
 
               this.saleForm = { productId: "", quantity: 1, customer: "" };
-              alert("Venda registrada com sucesso!");
+              alert("Venda registrada e estoque atualizado!");
             } catch (error) {
               console.error("Erro ao registrar venda:", error);
+              alert("Erro ao registrar venda. Tente novamente.");
             }
           },
 
           async recordExpense() {
             try {
-              const expenseData = {
-                id: Date.now().toString(),
+              await db.collection("expenses").add({
                 description: this.expenseForm.description,
                 amount: parseFloat(this.expenseForm.amount),
                 category: this.expenseForm.category,
-                date: new Date(),
-                type: "expense",
-              };
-
-              this.expenses.push(expenseData);
-              this.saveToLocalStorage("expenses", this.expenses);
-
+                date: new Date()
+              });
               this.expenseForm = { description: "", amount: 0, category: "" };
               alert("Despesa registrada com sucesso!");
             } catch (error) {
               console.error("Erro ao registrar despesa:", error);
+              alert("Erro ao registrar despesa. Tente novamente.");
             }
           },
 
           // Relatórios
-          async generateReport() {
+          generateReport() {
             try {
               let startDate, endDate;
 
@@ -1334,13 +1450,13 @@
 
               // Filtrar vendas do período
               const periodSales = this.sales.filter((sale) => {
-                const saleDate = new Date(sale.date);
+                const saleDate = sale.date?.toDate ? sale.date.toDate() : new Date(sale.date);
                 return saleDate >= startDate && saleDate <= endDate;
               });
 
               // Filtrar despesas do período
               const periodExpenses = this.expenses.filter((expense) => {
-                const expenseDate = new Date(expense.date);
+                const expenseDate = expense.date?.toDate ? expense.date.toDate() : new Date(expense.date);
                 return expenseDate >= startDate && expenseDate <= endDate;
               });
 
@@ -1395,78 +1511,62 @@
               };
             } catch (error) {
               console.error("Erro ao gerar relatório:", error);
+              alert("Erro ao gerar relatório. Tente novamente.");
             }
           },
 
-          // Utilitários de localStorage
-          saveToLocalStorage(key, data) {
-            try {
-              localStorage.setItem(
-                `refugioFlores_${key}`,
-                JSON.stringify(data)
-              );
-            } catch (error) {
-              console.log("localStorage não disponível");
-            }
-          },
-
-          loadFromLocalStorage(key) {
-            try {
-              const data = localStorage.getItem(`refugioFlores_${key}`);
-              return data ? JSON.parse(data) : null;
-            } catch (error) {
-              console.log("localStorage não disponível");
-              return null;
-            }
-          },
-
-          async exportToPDF() {
+          exportToPDF() {
             if (!this.report) return;
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            try {
+              const { jsPDF } = window.jspdf;
+              const doc = new jsPDF();
 
-            // Título
-            doc.setFontSize(20);
-            doc.text("Refúgio das Flores - Relatório Mensal", 20, 20);
+              // Título
+              doc.setFontSize(20);
+              doc.text("Refúgio das Flores - Relatório Mensal", 20, 20);
 
-            doc.setFontSize(12);
-            doc.text(`Período: ${this.report.period}`, 20, 35);
+              doc.setFontSize(12);
+              doc.text(`Período: ${this.report.period}`, 20, 35);
 
-            // Resumo financeiro
-            doc.setFontSize(16);
-            doc.text("Resumo Financeiro", 20, 55);
+              // Resumo financeiro
+              doc.setFontSize(16);
+              doc.text("Resumo Financeiro", 20, 55);
 
-            doc.setFontSize(12);
-            doc.text(`Produtos vendidos: ${this.report.totalSales}`, 20, 70);
-            doc.text(`Receita: R$ ${this.report.revenue.toFixed(2)}`, 20, 80);
-            doc.text(`Despesas: R$ ${this.report.expenses.toFixed(2)}`, 20, 90);
-            doc.text(
-              `Lucro: R$ ${(this.report.revenue - this.report.expenses).toFixed(
-                2
-              )}`,
-              20,
-              100
-            );
-
-            // Produtos mais vendidos
-            doc.setFontSize(16);
-            doc.text("Produtos Mais Vendidos", 20, 125);
-
-            let y = 140;
-            doc.setFontSize(12);
-            this.report.topProducts.forEach((product) => {
+              doc.setFontSize(12);
+              doc.text(`Produtos vendidos: ${this.report.totalSales}`, 20, 70);
+              doc.text(`Receita: R$ ${this.report.revenue.toFixed(2)}`, 20, 80);
+              doc.text(`Despesas: R$ ${this.report.expenses.toFixed(2)}`, 20, 90);
               doc.text(
-                `${product.name}: ${
-                  product.quantity
-                } unidades - R$ ${product.revenue.toFixed(2)}`,
+                `Lucro: R$ ${(this.report.revenue - this.report.expenses).toFixed(
+                  2
+                )}`,
                 20,
-                y
+                100
               );
-              y += 10;
-            });
 
-            doc.save(`relatorio-${this.report.period}.pdf`);
+              // Produtos mais vendidos
+              doc.setFontSize(16);
+              doc.text("Produtos Mais Vendidos", 20, 125);
+
+              let y = 140;
+              doc.setFontSize(12);
+              this.report.topProducts.forEach((product) => {
+                doc.text(
+                  `${product.name}: ${
+                    product.quantity
+                  } unidades - R$ ${product.revenue.toFixed(2)}`,
+                  20,
+                  y
+                );
+                y += 10;
+              });
+
+              doc.save(`relatorio-${this.report.period}.pdf`);
+            } catch (error) {
+              console.error("Erro ao exportar PDF:", error);
+              alert("Erro ao exportar PDF. Verifique se o jsPDF está carregado.");
+            }
           },
 
           // Utilitários
@@ -1486,11 +1586,11 @@
           },
 
           // Computed properties
-          get filteredStock() {
-            return this.stock.filter((item) =>
-              item.name.toLowerCase().includes(this.stockSearch.toLowerCase())
-            );
-          },
+         get filteredStock() {
+  return this.stock.filter(item =>
+    item.name?.toLowerCase().includes(this.stockSearch.toLowerCase())
+  );
+},
 
           get filteredProducts() {
             return this.products.filter((product) =>
@@ -1518,16 +1618,12 @@
                 type: "sale",
                 description: `${sale.quantity}x ${sale.productName}`,
                 amount: sale.total,
-                date:
-                  sale.date instanceof Date ? sale.date : new Date(sale.date),
+                date: sale.date?.toDate ? sale.date.toDate() : new Date(sale.date),
               })),
               ...this.expenses.map((expense) => ({
                 ...expense,
                 type: "expense",
-                date:
-                  expense.date instanceof Date
-                    ? expense.date
-                    : new Date(expense.date),
+                date: expense.date?.toDate ? expense.date.toDate() : new Date(expense.date),
               })),
             ]
               .sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -1535,34 +1631,54 @@
 
             return transactions;
           },
+
+          // Função para forçar atualização
+          async forceRefresh() {
+            console.log("Forçando atualização dos dados...");
+            try {
+              // Recarregar estoque
+              const stockSnapshot = await db.collection("stock").get();
+              this.stock = stockSnapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+              }));
+
+              // Recarregar produtos
+              const productsSnapshot = await db.collection("products").get();
+              this.products = productsSnapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+              }));
+
+              // Recarregar vendas
+              const salesSnapshot = await db.collection("sales").get();
+              this.sales = salesSnapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+              }));
+
+              // Recarregar despesas
+              const expensesSnapshot = await db.collection("expenses").get();
+              this.expenses = expensesSnapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+              }));
+
+              console.log("Dados atualizados:", {
+                stock: this.stock.length,
+                products: this.products.length,
+                sales: this.sales.length,
+                expenses: this.expenses.length
+              });
+
+              alert("Dados atualizados com sucesso!");
+            } catch (error) {
+              console.error("Erro ao atualizar dados:", error);
+              alert("Erro ao atualizar dados. Tente novamente.");
+            }
+          },
         };
       }
-
-      // Inicializar a aplicação quando a página carregar
-      document.addEventListener("DOMContentLoaded", function () {
-        // Alpine.js será inicializado automaticamente
-      });
     </script>
   </body>
-  <!-- SDK Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
-
-  <script>
-    // Config do Firebase
-  const firebaseConfig = {
-  apiKey: "AIzaSyBZva2fJCqsNx24pWlkmBAVAZetBFvO3Rc",
-  authDomain: "refugio-das-flores-a9e11.firebaseapp.com",
-  projectId: "refugio-das-flores-a9e11",
-  storageBucket: "refugio-das-flores-a9e11.firebasestorage.app",
-  messagingSenderId: "689639393299",
-  appId: "1:689639393299:web:8f438802e7f3f8c86e97e6",
-  measurementId: "G-Z545Q41PJM"
-};
-
-
-    // Inicializar Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
 </html>
