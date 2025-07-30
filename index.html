@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refúgio das Flores - Sistema de Gestão</title>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.5rem;
+        }
+        
+        .flower-icon {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: white;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .hidden { display: none !important; }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ingredient-item input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #e1e5e9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body x-data="flowerShopApp()">
+    <!-- Login Screen -->
+    <div x-show="!user" class="login-container">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <h1 class="logo">🌸 Refúgio das Flores</h1>
+                <p style="color: #666; margin-top: 0.5rem;">Sistema de Gestão</p>
+            </div>
+            
+            <div x-show="error" class="alert alert-danger" x-text="error"></div>
+            
+            <form @submit.prevent="login()">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <select x-model="loginData.username" class="form-control" required>
+                        <option value="">Selecione o usuário</option>
+                        <option value="LucasP">LucasP</option>
+                        <option value="EduardaP">EduardaP</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" x-model="loginData.password" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;" :disabled="loading">
+                    <span x-show="!loading">Entrar</span>
+                    <span x-show="loading">Entrando...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div x-show="user" style="display: none;">
+        <header class="header">
+            <div class="logo">
+                <svg class="flower-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50 C85 30, 60 30, 50 50 C40 70, 60 85, 80 80 C70 95, 70 120, 90 130 C110 140, 125 120, 120 100 C135 110, 160 110, 170 90 C180 70, 160 55, 140 60 C150 45, 150 20, 130 10 C110 0, 95 20, 100 40 Z M100 70 C110 70, 120 80, 120 90 C120 100, 110 110, 100 110 C90 110, 80 100, 80 90 C80 80, 90 70, 100 70 Z" stroke="white" stroke-width="3" fill="white"/>
+                    <circle cx="100" cy="90" r="8" fill="white"/>
+                    <circle cx="85" cy="75" r="3" fill="white"/>
+                    <circle cx="115" cy="75" r="3" fill="white"/>
+                    <circle cx="85" cy="105" r="3" fill="white"/>
+                    <circle cx="115" cy="105" r="3" fill="white"/>
+                    <circle cx="70" cy="90" r="3" fill="white"/>
+                    <circle cx="130" cy="90" r="3" fill="white"/>
+                    <circle cx="100" cy="60" r="3" fill="white"/>
+                    <circle cx="100" cy="120" r="3" fill="white"/>
+                </svg>
+                Refúgio das Flores
+            </div>
+            <div class="user-info">
+                <span x-text="user?.displayName || 'Usuário'"></span>
+                <button @click="logout()" class="btn btn-danger">Sair</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <nav class="nav-tabs">
+                <button 
+                    class="nav-tab" 
+                    :class="{ active: activeTab === 'estoque' }" 
+                    @click="activeTab = 'estoque'"
+                >
+                    📦 Estoque
+                </button>
+                <button 
+                    class="nav-tab" 
+                    :class="{ active: activeTab === 'produtos' }" 
+                    @click="activeTab = 'produtos'"
+                >
+                    🌹 Produtos
+                </button>
+                <button 
+                    class="nav-tab" 
+                    :class="{ active: activeTab === 'producao' }" 
+                    @click="activeTab = 'producao'"
+                >
+                    🏭 Produção
+                </button>
+                <button 
+                    class="nav-tab" 
+                    :class="{ active: activeTab === 'financeiro' }" 
+                    @click="activeTab = 'financeiro'"
+                >
+                    💰 Financeiro
+                </button>
+                <button 
+                    class="nav-tab" 
+                    :class="{ active: activeTab === 'relatorios' }" 
+                    @click="activeTab = 'relatorios'"
+                >
+                    📊 Relatórios
+                </button>
+            </nav>
+
+            <!-- Estoque Tab -->
+            <div x-show="activeTab === 'estoque'" class="tab-content">
+                <h2 class="card-title">Controle de Estoque</h2>
+                
+                <div class="card">
+                    <h3>Adicionar/Editar Matéria-Prima</h3>
+                    <form @submit.prevent="saveStock()">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 100px; gap: 1rem; align-items: end;">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input type="text" x-model="stockForm.name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="number" x-model="stockForm.quantity" class="form-control" required min="0" step="0.01">
+                            </div>
+                            <button type="submit" class="btn btn-success">
+                                <span x-show="!stockForm.id">Adicionar</span>
+                                <span x-show="stockForm.id">Atualizar</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <input type="text" x-model="stockSearch" placeholder="Buscar matéria-prima..." class="search-box">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Quantidade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="item in filteredStock" :key="item.id">
+                            <tr>
+                                <td x-text="item.name"></td>
+                                <td x-text="item.quantity"></td>
+                                <td>
+                                    <button @click="editStock(item)" class="btn btn-warning">Editar</button>
+                                    <button @click="deleteStock(item.id)" class="btn btn-danger">Excluir</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Produtos Tab -->
+            <div x-show="activeTab === 'produtos'" class="tab-content">
+                <h2 class="card-title">Cadastro de Produtos</h2>
+                
+                <div class="card">
+                    <h3>Adicionar/Editar Produto</h3>
+                    <form @submit.prevent="saveProduct()">
+                        <div class="form-group">
+                            <label>Nome do Produto</label>
+                            <input type="text" x-model="productForm.name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Preço de Venda (R$)</label>
+                            <input type="number" x-model="productForm.price" class="form-control" required min="0" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Matérias-Primas Necessárias</label>
+                            <div x-show="stock.length === 0" class="alert alert-warning">
+                                Adicione matérias-primas no estoque primeiro.
+                            </div>
+                            <template x-for="(ingredient, index) in productForm.ingredients" :key="index">
+                                <div class="ingredient-item">
+                                    <select x-model="ingredient.stockId" required style="flex: 2;">
+                                        <option value="">Selecione a matéria-prima</option>
+                                        <template x-for="stockItem in stock" :key="stockItem.id">
+                                            <option :value="stockItem.id" x-text="stockItem.name"></option>
+                                        </template>
+                                    </select>
+                                    <input type="number" x-model="ingredient.quantity" placeholder="Quantidade" required min="0" step="0.01">
+                                    <button type="button" @click="removeIngredient(index)" class="btn btn-danger">×</button>
+                                </div>
+                            </template>
+                            <button type="button" @click="addIngredient()" class="btn btn-primary">+ Adicionar Matéria-Prima</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            <span x-show="!productForm.id">Adicionar Produto</span>
+                            <span x-show="productForm.id">Atualizar Produto</span>
+                        </button>
+                    </form>
+                </div>
+
+                <input type="text" x-model="productSearch" placeholder="Buscar produto..." class="search-box">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Preço</th>
+                            <th>Ingredientes</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="product in filteredProducts" :key="product.id">
+                            <tr>
+                                <td x-text="product.name"></td>
+                                <td x-text="'R$ ' + product.price.toFixed(2)"></td>
+                                <td>
+                                    <template x-for="ing in product.ingredients">
+                                        <div x-text="getStockName(ing.stockId) + ': ' + ing.quantity"></div>
+                                    </template>
+                                </td>
+                                <td>
+                                    <button @click="editProduct(product)" class="btn btn-warning">Editar</button>
+                                    <button @click="deleteProduct(product.id)" class="btn btn-danger">Excluir</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Produção Tab -->
+            <div x-show="activeTab === 'producao'" class="tab-content">
+                <h2 class="card-title">Produção</h2>
+                
+                <div class="card">
+                    <h3>Produzir Produto</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 100px 100px; gap: 1rem; align-items: end;">
+                        <div class="form-group">
+                            <label>Produto</label>
+                            <select x-model="productionForm.productId" class="form-control">
+                                <option value="">Selecione o produto</option>
+                                <template x-for="product in products" :key="product.id">
+                                    <option :value="product.id" x-text="product.name"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Qtd</label>
+                            <input type="number" x-model="productionForm.quantity" class="form-control" min="1" value="1">
+                        </div>
+                        <button @click="produce()" class="btn btn-success" :disabled="!productionForm.productId">Produzir</button>
+                    </div>
+                </div>
+
+                <div x-show="productionForm.productId" class="card">
+                    <h4>Matérias-primas necessárias:</h4>
+                    <template x-for="ingredient in getProductIngredients(productionForm.productId)">
+                        <div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid #eee;">
+                            <span x-text="getStockName(ingredient.stockId)"></span>
+                            <span>
+                                Necessário: <strong x-text="(ingredient.quantity * (productionForm.quantity || 1)).toFixed(2)"></strong> | 
+                                Disponível: <strong x-text="getStockQuantity(ingredient.stockId).toFixed(2)"></strong>
+                                <span x-show="getStockQuantity(ingredient.stockId) < (ingredient.quantity * (productionForm.quantity || 1))" style="color: red;">❌</span>
+                                <span x-show="getStockQuantity(ingredient.stockId) >= (ingredient.quantity * (productionForm.quantity || 1))" style="color: green;">✅</span>
+                            </span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Financeiro Tab -->
+            <div x-show="activeTab === 'financeiro'" class="tab-content">
+                <h2 class="card-title">Controle Financeiro</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" x-text="'R$ ' + totalRevenue.toFixed(2)"></div>
+                        <div class="stat-label">Receita Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" x-text="'R$ ' + totalExpenses.toFixed(2)"></div>
+                        <div class="stat-label">Despesas Totais</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" x-text="'R$ ' + (totalRevenue - totalExpenses).toFixed(2)"></div>
+                        <div class="stat-label">Lucro</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="card">
+                        <h3>Registrar Venda</h3>
+                        <form @submit.prevent="recordSale()">
+                            <div class="form-group">
+                                <label>Produto</label>
+                                <select x-model="saleForm.productId" class="form-control" required>
+                                    <option value="">Selecione o produto</option>
+                                    <template x-for="product in products" :key="product.id">
+                                        <option :value="product.id" x-text="product.name + ' - R$ ' + product.price.toFixed(2)"></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="number" x-model="saleForm.quantity" class="form-control" required min="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Cliente (opcional)</label>
+                                <input type="text" x-model="saleForm.customer" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-success">Registrar Venda</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3>Registrar Despesa</h3>
+                        <form @submit.prevent="recordExpense()">
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" x-model="expenseForm.description" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Valor (R$)</label>
+                                <input type="number" x-model="expenseForm.amount" class="form-control" required min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <select x-model="expenseForm.category" class="form-control" required>
+                                    <option value="">Selecione a categoria</option>
+                                    <option value="materiais">Materiais</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="equipamentos">Equipamentos</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Registrar Despesa</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Últimas Transações</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="transaction in recentTransactions" :key="transaction.id">
+                                <tr>
+                                    <td x-text="new Date(transaction.date).toLocaleDateString('pt-BR')"></td>
+                                    <td>
+                                        <span x-show="transaction.type === 'sale'" style="color: green;">Venda</span>
+                                        <span x-show="transaction.type === 'expense'" style="color: red;">Despesa</span>
+                                    </td>
+                                    <td x-text="transaction.description"></td>
+                                    <td :style="transaction.type === 'sale' ? 'color: green;' : 'color: red;'" 
+                                        x-text="(transaction.type === 'sale' ? '+' : '-') + 'R$ ' + transaction.amount.toFixed(2)"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Relatórios Tab -->
+            <div x-show="activeTab === 'relatorios'" class="tab-content">
+                <h2 class="card-title">Relatórios</h2>
+                
+                <div class="card">
+                    <h3>Filtros</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 100px; gap: 1rem; align-items: end;">
+                        <div class="form-group">
+                            <label>Mês</label>
+                            <input type="month" x-model="reportFilters.month" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Ano</label>
+                            <input type="number" x-model="reportFilters.year" class="form-control" :value="new Date().getFullYear()">
+                        </div>
+                        <button @click="generateReport()" class="btn btn-primary">Gerar</button>
+                    </div>
+                </div>
+
+                <div x-show="report" class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Relatório Mensal</h3>
+                        <button @click="exportToPDF()" class="btn btn-success">📄 Exportar PDF</button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" x-text="report?.totalSales || 0"></div>
+                            <div class="stat-label">Produtos Vendidos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" x-text="'R$ ' + (report?.revenue || 0).toFixed(2)"></div>
+                            <div class="stat-label">Receita</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" x-text="'R$ ' + (report?.expenses || 0).toFixed(2)"></div>
+                            <div class="stat-label">Despesas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" x-text="'R$ ' + ((report?.revenue || 0) - (report?.expenses || 0)).toFixed(2)"></div>
+                            <div class="stat-label">Lucro Líquido</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <h4>Produtos Mais Vendidos</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                        <th>Receita</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="item in report?.topProducts || []" :key="item.name">
+                                        <tr>
+                                            <td x-text="item.name"></td>
+                                            <td x-text="item.quantity"></td>
+                                            <td x-text="'R$ ' + item.revenue.toFixed(2)"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <h4>Despesas por Categoria</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Categoria</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="item in report?.expensesByCategory || []" :key="item.category">
+                                        <tr>
+                                            <td x-text="item.category"></td>
+                                            <td x-text="'R$ ' + item.amount.toFixed(2)"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function flowerShopApp() {
+            return {
+                // Estado da aplicação
+                user: null,
+                loading: false,
+                error: '',
+                activeTab: 'estoque',
+                
+                // Dados
+                stock: [],
+                products: [],
+                sales: [],
+                expenses: [],
+                
+                // Formulários
+                loginData: {
+                    username: '',
+                    password: ''
+                },
+                stockForm: {
+                    id: null,
+                    name: '',
+                    quantity: 0
+                },
+                productForm: {
+                    id: null,
+                    name: '',
+                    price: 0,
+                    ingredients: []
+                },
+                productionForm: {
+                    productId: '',
+                    quantity: 1
+                },
+                saleForm: {
+                    productId: '',
+                    quantity: 1,
+                    customer: ''
+                },
+                expenseForm: {
+                    description: '',
+                    amount: 0,
+                    category: ''
+                },
+                reportFilters: {
+                    month: '',
+                    year: new Date().getFullYear()
+                },
+                
+                // Pesquisa e filtros
+                stockSearch: '',
+                productSearch: '',
+                report: null,
+
+                // Inicialização
+                async init() {
+                    await this.loadData();
+                },
+
+                // Autenticação
+                async login() {
+                    this.loading = true;
+                    this.error = '';
+                    
+                    try {
+                        // Credenciais fixas definidas
+                        const credentials = {
+                            'LucasP': '14032004',
+                            'EduardaP': '06052005'
+                        };
+                        console.log('Tentando login com:', this.loginData.username, this.loginData.password);
+                        
+                        if (credentials[this.loginData.username] === this.loginData.password) {
+                            // Simular usuário autenticado
+                            this.user = {
+                                uid: this.loginData.username,
+                                displayName: this.loginData.username === 'LucasP' ? 'Lucas P' : 'Eduarda P',
+                                email: `${this.loginData.username.toLowerCase()}@refugiodasflores.com`
+                            };
+                            console.log('Login bem-sucedido:', this.user);
+                            await this.loadData();
+                        } else {
+                            console.log('Credenciais inválidas');
+                            throw new Error('Credenciais inválidas');
+                        }
+                    } catch (error) {
+                        console.error('Erro no login:', error);
+                        this.error = 'Usuário ou senha incorretos';
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                async logout() {
+                    this.user = null;
+                    this.loginData = { username: '', password: '' };
+                },
+
+                // Inicialização de dados mock
+                async initializeMockData() {
+                    if (!this.stock.length) {
+                        this.stock = [
+                            { id: '1', name: 'Rosas Vermelhas', quantity: 50 },
+                            { id: '2', name: 'Folhas de Samambaia', quantity: 30 },
+                            { id: '3', name: 'Papel Celofane', quantity: 100 },
+                            { id: '4', name: 'Fita Cetim', quantity: 25 },
+                            { id: '5', name: 'Lírios Brancos', quantity: 35 }
+                        ];
+                    }
+                    if (!this.products.length) {
+                        this.products = [
+                            {
+                                id: '1',
+                                name: 'Buquê Romântico',
+                                price: 45.00,
+                                ingredients: [
+                                    { stockId: '1', quantity: 12 },
+                                    { stockId: '2', quantity: 5 },
+                                    { stockId: '4', quantity: 1 }
+                                ]
+                            }
+                        ];
+                    }
+                },
+
+                // Carregamento de dados
+                async loadData() {
+                    await this.initializeMockData();
+                },
+
+                // Métodos para reset de formulários
+                editStock(item) {
+                    this.stockForm = { ...item };
+                },
+
+                resetStockForm() {
+                    this.stockForm = { id: null, name: '', quantity: 0 };
+                },
+
+                addIngredient() {
+                    this.productForm.ingredients.push({ stockId: '', quantity: 0 });
+                },
+
+                removeIngredient(index) {
+                    this.productForm.ingredients.splice(index, 1);
+                },
+
+                editProduct(product) {
+                    this.productForm = { ...product, ingredients: [...product.ingredients] };
+                },
+
+                resetProductForm() {
+                    this.productForm = { id: null, name: '', price: 0, ingredients: [] };
+                },
+
+                // Gestão de Estoque com localStorage
+                async saveStock() {
+                    try {
+                        if (this.stockForm.id) {
+                            const index = this.stock.findIndex(item => item.id === this.stockForm.id);
+                            if (index !== -1) {
+                                this.stock[index] = {
+                                    ...this.stock[index],
+                                    name: this.stockForm.name,
+                                    quantity: parseFloat(this.stockForm.quantity)
+                                };
+                            }
+                        } else {
+                            const newItem = {
+                                id: Date.now().toString(),
+                                name: this.stockForm.name,
+                                quantity: parseFloat(this.stockForm.quantity)
+                            };
+                            this.stock.push(newItem);
+                        }
+
+                        this.saveToLocalStorage('stock', this.stock);
+                        this.resetStockForm();
+                    } catch (error) {
+                        console.error('Erro ao salvar estoque:', error);
+                    }
+                },
+
+                async deleteStock(id) {
+                    if (confirm('Tem certeza que deseja excluir este item?')) {
+                        this.stock = this.stock.filter(item => item.id !== id);
+                        this.saveToLocalStorage('stock', this.stock);
+                    }
+                },
+
+                // Gestão de Produtos com localStorage
+                async saveProduct() {
+                    try {
+                        if (this.productForm.id) {
+                            const index = this.products.findIndex(product => product.id === this.productForm.id);
+                            if (index !== -1) {
+                                this.products[index] = {
+                                    ...this.products[index],
+                                    name: this.productForm.name,
+                                    price: parseFloat(this.productForm.price),
+                                    ingredients: this.productForm.ingredients.map(ing => ({
+                                        stockId: ing.stockId,
+                                        quantity: parseFloat(ing.quantity)
+                                    }))
+                                };
+                            }
+                        } else {
+                            const newProduct = {
+                                id: Date.now().toString(),
+                                name: this.productForm.name,
+                                price: parseFloat(this.productForm.price),
+                                ingredients: this.productForm.ingredients.map(ing => ({
+                                    stockId: ing.stockId,
+                                    quantity: parseFloat(ing.quantity)
+                                }))
+                            };
+                            this.products.push(newProduct);
+                        }
+
+                        this.saveToLocalStorage('products', this.products);
+                        this.resetProductForm();
+                    } catch (error) {
+                        console.error('Erro ao salvar produto:', error);
+                    }
+                },
+
+                async deleteProduct(id) {
+                    if (confirm('Tem certeza que deseja excluir este produto?')) {
+                        this.products = this.products.filter(product => product.id !== id);
+                        this.saveToLocalStorage('products', this.products);
+                    }
+                },
+
+                // Produção
+                async produce() {
+                    if (!this.productionForm.productId) return;
+
+                    const product = this.products.find(p => p.id === this.productionForm.productId);
+                    if (!product) return;
+
+                    const quantity = parseInt(this.productionForm.quantity) || 1;
+                    
+                    // Verificar disponibilidade
+                    const insufficient = [];
+                    for (const ingredient of product.ingredients) {
+                        const stockItem = this.stock.find(s => s.id === ingredient.stockId);
+                        const needed = ingredient.quantity * quantity;
+                        if (!stockItem || stockItem.quantity < needed) {
+                            insufficient.push(this.getStockName(ingredient.stockId));
+                        }
+                    }
+
+                    if (insufficient.length > 0) {
+                        alert(`Estoque insuficiente para: ${insufficient.join(', ')}`);
+                        return;
+                    }
+
+                    try {
+                        // Atualizar estoque
+                        for (const ingredient of product.ingredients) {
+                            const stockIndex = this.stock.findIndex(s => s.id === ingredient.stockId);
+                            if (stockIndex !== -1) {
+                                this.stock[stockIndex].quantity -= (ingredient.quantity * quantity);
+                            }
+                        }
+
+                        this.saveToLocalStorage('stock', this.stock);
+                        this.productionForm = { productId: '', quantity: 1 };
+                        alert(`${quantity} unidade(s) de ${product.name} produzida(s) com sucesso!`);
+                    } catch (error) {
+                        console.error('Erro na produção:', error);
+                        alert('Erro ao produzir. Tente novamente.');
+                    }
+                },
+
+                // Financeiro
+                async recordSale() {
+                    try {
+                        const product = this.products.find(p => p.id === this.saleForm.productId);
+                        if (!product) return;
+
+                        const quantity = parseInt(this.saleForm.quantity);
+                        const total = product.price * quantity;
+
+                        const saleData = {
+                            id: Date.now().toString(),
+                            productId: this.saleForm.productId,
+                            productName: product.name,
+                            quantity: quantity,
+                            unitPrice: product.price,
+                            total: total,
+                            customer: this.saleForm.customer || 'Cliente não informado',
+                            date: new Date(),
+                            type: 'sale'
+                        };
+
+                        this.sales.push(saleData);
+                        this.saveToLocalStorage('sales', this.sales);
+                        
+                        this.saleForm = { productId: '', quantity: 1, customer: '' };
+                        alert('Venda registrada com sucesso!');
+                    } catch (error) {
+                        console.error('Erro ao registrar venda:', error);
+                    }
+                },
+
+                async recordExpense() {
+                    try {
+                        const expenseData = {
+                            id: Date.now().toString(),
+                            description: this.expenseForm.description,
+                            amount: parseFloat(this.expenseForm.amount),
+                            category: this.expenseForm.category,
+                            date: new Date(),
+                            type: 'expense'
+                        };
+
+                        this.expenses.push(expenseData);
+                        this.saveToLocalStorage('expenses', this.expenses);
+                        
+                        this.expenseForm = { description: '', amount: 0, category: '' };
+                        alert('Despesa registrada com sucesso!');
+                    } catch (error) {
+                        console.error('Erro ao registrar despesa:', error);
+                    }
+                },
+
+                // Relatórios
+                async generateReport() {
+                    try {
+                        let startDate, endDate;
+                        
+                        if (this.reportFilters.month) {
+                            const [year, month] = this.reportFilters.month.split('-');
+                            startDate = new Date(year, month - 1, 1);
+                            endDate = new Date(year, month, 0);
+                        } else {
+                            startDate = new Date(this.reportFilters.year, 0, 1);
+                            endDate = new Date(this.reportFilters.year, 11, 31);
+                        }
+
+                        // Filtrar vendas do período
+                        const periodSales = this.sales.filter(sale => {
+                            const saleDate = new Date(sale.date);
+                            return saleDate >= startDate && saleDate <= endDate;
+                        });
+
+                        // Filtrar despesas do período
+                        const periodExpenses = this.expenses.filter(expense => {
+                            const expenseDate = new Date(expense.date);
+                            return expenseDate >= startDate && expenseDate <= endDate;
+                        });
+
+                        // Calcular estatísticas
+                        const totalSales = periodSales.reduce((sum, sale) => sum + sale.quantity, 0);
+                        const revenue = periodSales.reduce((sum, sale) => sum + sale.total, 0);
+                        const expenses = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+                        // Produtos mais vendidos
+                        const productSales = {};
+                        periodSales.forEach(sale => {
+                            if (!productSales[sale.productName]) {
+                                productSales[sale.productName] = { quantity: 0, revenue: 0 };
+                            }
+                            productSales[sale.productName].quantity += sale.quantity;
+                            productSales[sale.productName].revenue += sale.total;
+                        });
+
+                        const topProducts = Object.entries(productSales)
+                            .map(([name, data]) => ({ name, ...data }))
+                            .sort((a, b) => b.quantity - a.quantity);
+
+                        // Despesas por categoria
+                        const categoryExpenses = {};
+                        periodExpenses.forEach(expense => {
+                            if (!categoryExpenses[expense.category]) {
+                                categoryExpenses[expense.category] = 0;
+                            }
+                            categoryExpenses[expense.category] += expense.amount;
+                        });
+
+                        const expensesByCategory = Object.entries(categoryExpenses)
+                            .map(([category, amount]) => ({ category, amount }))
+                            .sort((a, b) => b.amount - a.amount);
+
+                        this.report = {
+                            totalSales,
+                            revenue,
+                            expenses,
+                            topProducts,
+                            expensesByCategory,
+                            period: this.reportFilters.month || this.reportFilters.year
+                        };
+                    } catch (error) {
+                        console.error('Erro ao gerar relatório:', error);
+                    }
+                },
+
+                // Utilitários de localStorage
+                saveToLocalStorage(key, data) {
+                    try {
+                        localStorage.setItem(`refugioFlores_${key}`, JSON.stringify(data));
+                    } catch (error) {
+                        console.log('localStorage não disponível');
+                    }
+                },
+
+                loadFromLocalStorage(key) {
+                    try {
+                        const data = localStorage.getItem(`refugioFlores_${key}`);
+                        return data ? JSON.parse(data) : null;
+                    } catch (error) {
+                        console.log('localStorage não disponível');
+                        return null;
+                    }
+                },
+
+                async exportToPDF() {
+                    if (!this.report) return;
+
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+
+                    // Título
+                    doc.setFontSize(20);
+                    doc.text('Refúgio das Flores - Relatório Mensal', 20, 20);
+                    
+                    doc.setFontSize(12);
+                    doc.text(`Período: ${this.report.period}`, 20, 35);
+
+                    // Resumo financeiro
+                    doc.setFontSize(16);
+                    doc.text('Resumo Financeiro', 20, 55);
+                    
+                    doc.setFontSize(12);
+                    doc.text(`Produtos vendidos: ${this.report.totalSales}`, 20, 70);
+                    doc.text(`Receita: R$ ${this.report.revenue.toFixed(2)}`, 20, 80);
+                    doc.text(`Despesas: R$ ${this.report.expenses.toFixed(2)}`, 20, 90);
+                    doc.text(`Lucro: R$ ${(this.report.revenue - this.report.expenses).toFixed(2)}`, 20, 100);
+
+                    // Produtos mais vendidos
+                    doc.setFontSize(16);
+                    doc.text('Produtos Mais Vendidos', 20, 125);
+                    
+                    let y = 140;
+                    doc.setFontSize(12);
+                    this.report.topProducts.forEach(product => {
+                        doc.text(`${product.name}: ${product.quantity} unidades - R$ ${product.revenue.toFixed(2)}`, 20, y);
+                        y += 10;
+                    });
+
+                    doc.save(`relatorio-${this.report.period}.pdf`);
+                },
+
+                // Utilitários
+                getStockName(stockId) {
+                    const item = this.stock.find(s => s.id === stockId);
+                    return item ? item.name : 'Item não encontrado';
+                },
+
+                getStockQuantity(stockId) {
+                    const item = this.stock.find(s => s.id === stockId);
+                    return item ? item.quantity : 0;
+                },
+
+                getProductIngredients(productId) {
+                    const product = this.products.find(p => p.id === productId);
+                    return product ? product.ingredients : [];
+                },
+
+                // Computed properties
+                get filteredStock() {
+                    return this.stock.filter(item => 
+                        item.name.toLowerCase().includes(this.stockSearch.toLowerCase())
+                    );
+                },
+
+                get filteredProducts() {
+                    return this.products.filter(product => 
+                        product.name.toLowerCase().includes(this.productSearch.toLowerCase())
+                    );
+                },
+
+                get totalRevenue() {
+                    return this.sales.reduce((sum, sale) => sum + (sale.total || 0), 0);
+                },
+
+                get totalExpenses() {
+                    return this.expenses.reduce((sum, expense) => sum + (expense.amount || 0), 0);
+                },
+
+                get recentTransactions() {
+                    const transactions = [
+                        ...this.sales.map(sale => ({
+                            ...sale,
+                            type: 'sale',
+                            description: `${sale.quantity}x ${sale.productName}`,
+                            amount: sale.total,
+                            date: sale.date instanceof Date ? sale.date : new Date(sale.date)
+                        })),
+                        ...this.expenses.map(expense => ({
+                            ...expense,
+                            type: 'expense',
+                            date: expense.date instanceof Date ? expense.date : new Date(expense.date)
+                        }))
+                    ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+
+                    return transactions;
+                }
+            };
+        }
+
+        // Inicializar a aplicação quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alpine.js será inicializado automaticamente
+        });
+    </script>
+</body>
+</html>
