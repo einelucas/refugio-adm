@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Refúgio das Flores - Sistema de Gestão</title>
-    
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <script
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
@@ -418,9 +422,20 @@
           <h2 class="card-title">Controle de Estoque</h2>
 
           <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+              "
+            >
               <h3>Adicionar/Editar Matéria-Prima</h3>
-              <button @click="forceRefresh()" class="btn btn-primary" style="font-size: 0.8rem;">
+              <button
+                @click="forceRefresh()"
+                class="btn btn-primary"
+                style="font-size: 0.8rem"
+              >
                 🔄 Atualizar Lista
               </button>
             </div>
@@ -503,9 +518,20 @@
           <h2 class="card-title">Cadastro de Produtos</h2>
 
           <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+              "
+            >
               <h3>Adicionar/Editar Produto</h3>
-              <button @click="forceRefresh()" class="btn btn-primary" style="font-size: 0.8rem;">
+              <button
+                @click="forceRefresh()"
+                class="btn btn-primary"
+                style="font-size: 0.8rem"
+              >
                 🔄 Atualizar Lista
               </button>
             </div>
@@ -1094,46 +1120,38 @@
           },
 
           // Autenticação
-          async login() {
+          login: function () {
             this.loading = true;
             this.error = "";
 
-            try {
-              // Credenciais fixas definidas
-              const credentials = {
-                LucasP: "14032004",
-                EduardaP: "06052005",
-              };
-              console.log(
-                "Tentando login com:",
-                this.loginData.username,
-                this.loginData.password
-              );
+            let email = "";
+            let senha = this.loginData.password;
 
-              if (
-                credentials[this.loginData.username] === this.loginData.password
-              ) {
-                // Simular usuário autenticado
-                this.user = {
-                  uid: this.loginData.username,
-                  displayName:
-                    this.loginData.username === "LucasP"
-                      ? "Lucas P"
-                      : "Eduarda P",
-                  email: `${this.loginData.username.toLowerCase()}@refugiodasflores.com`,
-                };
-                console.log("Login bem-sucedido:", this.user);
-                await this.loadData();
-              } else {
-                console.log("Credenciais inválidas");
-                throw new Error("Credenciais inválidas");
-              }
-            } catch (error) {
-              console.error("Erro no login:", error);
-              this.error = "Usuário ou senha incorretos";
-            } finally {
+            if (this.loginData.username === "LucasP") {
+              email = "lucas@refugio.com.br"; // coloque o e-mail do Lucas que você criou no Firebase
+            } else if (this.loginData.username === "EduardaP") {
+              email = "eduarda@refugio.com.br"; // coloque o e-mail da Eduarda criado no Firebase
+            } else {
+              this.error = "Usuário inválido";
               this.loading = false;
+              return;
             }
+
+            firebase
+              .auth()
+              .signInWithEmailAndPassword(email, senha)
+              .then((userCredential) => {
+                this.user = userCredential.user;
+                console.log("Logado como:", this.user.email);
+                this.loadData();
+              })
+              .catch((error) => {
+                console.error("Erro no login:", error);
+                this.error = "Usuário ou senha incorretos";
+              })
+              .finally(() => {
+                this.loading = false;
+              });
           },
 
           async logout() {
@@ -1150,21 +1168,24 @@
           async loadData() {
             try {
               // Listener para estoque
-              db.collection("stock").onSnapshot(snapshot => {
-               this.stock = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
-               this.$nextTick(() => {
+              db.collection("stock").onSnapshot((snapshot) => {
+                this.stock = snapshot.docs.map((doc) => ({
+                  id: doc.id,
+                  ...doc.data(),
+                }));
+
+                this.$nextTick(() => {
                   // Força a reatividade do Alpine.js
                   this.stock = [...this.stock];
                 });
               });
 
               // Listener para produtos
-              db.collection("products").onSnapshot(snapshot => {
+              db.collection("products").onSnapshot((snapshot) => {
                 console.log("Products data updated:", snapshot.docs.length);
-                this.products = snapshot.docs.map(doc => ({ 
-                  id: doc.id, 
-                  ...doc.data() 
+                this.products = snapshot.docs.map((doc) => ({
+                  id: doc.id,
+                  ...doc.data(),
                 }));
                 this.$nextTick(() => {
                   this.products = [...this.products];
@@ -1172,11 +1193,11 @@
               });
 
               // Listener para vendas
-              db.collection("sales").onSnapshot(snapshot => {
+              db.collection("sales").onSnapshot((snapshot) => {
                 console.log("Sales data updated:", snapshot.docs.length);
-                this.sales = snapshot.docs.map(doc => ({ 
-                  id: doc.id, 
-                  ...doc.data() 
+                this.sales = snapshot.docs.map((doc) => ({
+                  id: doc.id,
+                  ...doc.data(),
                 }));
                 this.$nextTick(() => {
                   this.sales = [...this.sales];
@@ -1184,11 +1205,11 @@
               });
 
               // Listener para despesas
-              db.collection("expenses").onSnapshot(snapshot => {
+              db.collection("expenses").onSnapshot((snapshot) => {
                 console.log("Expenses data updated:", snapshot.docs.length);
-                this.expenses = snapshot.docs.map(doc => ({ 
-                  id: doc.id, 
-                  ...doc.data() 
+                this.expenses = snapshot.docs.map((doc) => ({
+                  id: doc.id,
+                  ...doc.data(),
                 }));
                 this.$nextTick(() => {
                   this.expenses = [...this.expenses];
@@ -1197,10 +1218,8 @@
             } catch (error) {
               console.error("Erro ao carregar dados:", error);
               // Fallback para dados locais se Firebase falhar
-            
             }
           },
-
 
           // Métodos para reset de formulários
           editStock(item) {
@@ -1239,23 +1258,29 @@
           async saveStock() {
             try {
               console.log("Salvando estoque:", this.stockForm);
-              
+
               if (this.stockForm.id) {
                 // Atualizar item existente
-                await db.collection("stock").doc(this.stockForm.id).update({
-                  name: this.stockForm.name,
-                  quantity: parseFloat(this.stockForm.quantity)
-                });
+                await db
+                  .collection("stock")
+                  .doc(this.stockForm.id)
+                  .update({
+                    name: this.stockForm.name,
+                    quantity: parseFloat(this.stockForm.quantity),
+                  });
                 console.log("Estoque atualizado com sucesso");
               } else {
                 // Adicionar novo item
                 const docRef = await db.collection("stock").add({
                   name: this.stockForm.name,
-                  quantity: parseFloat(this.stockForm.quantity)
+                  quantity: parseFloat(this.stockForm.quantity),
                 });
-                console.log("Novo item de estoque adicionado com ID:", docRef.id);
+                console.log(
+                  "Novo item de estoque adicionado com ID:",
+                  docRef.id
+                );
               }
-              
+
               this.resetStockForm();
               alert("Item salvo com sucesso!");
             } catch (error) {
@@ -1278,31 +1303,34 @@
           async saveProduct() {
             try {
               console.log("Salvando produto:", this.productForm);
-              
+
               if (this.productForm.id) {
                 // Atualizar produto existente
-                await db.collection("products").doc(this.productForm.id).update({
-                  name: this.productForm.name,
-                  price: parseFloat(this.productForm.price),
-                  ingredients: this.productForm.ingredients.map(ing => ({
-                    stockId: ing.stockId,
-                    quantity: parseFloat(ing.quantity)
-                  }))
-                });
+                await db
+                  .collection("products")
+                  .doc(this.productForm.id)
+                  .update({
+                    name: this.productForm.name,
+                    price: parseFloat(this.productForm.price),
+                    ingredients: this.productForm.ingredients.map((ing) => ({
+                      stockId: ing.stockId,
+                      quantity: parseFloat(ing.quantity),
+                    })),
+                  });
                 console.log("Produto atualizado com sucesso");
               } else {
                 // Adicionar novo produto
                 const docRef = await db.collection("products").add({
                   name: this.productForm.name,
                   price: parseFloat(this.productForm.price),
-                  ingredients: this.productForm.ingredients.map(ing => ({
+                  ingredients: this.productForm.ingredients.map((ing) => ({
                     stockId: ing.stockId,
-                    quantity: parseFloat(ing.quantity)
-                  }))
+                    quantity: parseFloat(ing.quantity),
+                  })),
                 });
                 console.log("Novo produto adicionado com ID:", docRef.id);
               }
-              
+
               this.resetProductForm();
               alert("Produto salvo com sucesso!");
             } catch (error) {
@@ -1356,9 +1384,10 @@
                   (s) => s.id === ingredient.stockId
                 );
                 if (stockItem) {
-                  const newQuantity = stockItem.quantity - (ingredient.quantity * quantity);
+                  const newQuantity =
+                    stockItem.quantity - ingredient.quantity * quantity;
                   await db.collection("stock").doc(stockItem.id).update({
-                    quantity: newQuantity
+                    quantity: newQuantity,
                   });
                 }
               }
@@ -1376,7 +1405,9 @@
           // Financeiro
           async recordSale() {
             try {
-              const product = this.products.find(p => p.id === this.saleForm.productId);
+              const product = this.products.find(
+                (p) => p.id === this.saleForm.productId
+              );
               if (!product) return;
 
               const quantity = parseInt(this.saleForm.quantity);
@@ -1384,7 +1415,7 @@
 
               // Verificar e atualizar estoque
               for (let ing of product.ingredients) {
-                const stockItem = this.stock.find(s => s.id === ing.stockId);
+                const stockItem = this.stock.find((s) => s.id === ing.stockId);
                 if (!stockItem) continue;
 
                 const requiredQty = ing.quantity * quantity;
@@ -1394,9 +1425,12 @@
                   return;
                 }
 
-                await db.collection("stock").doc(stockItem.id).update({
-                  quantity: stockItem.quantity - requiredQty
-                });
+                await db
+                  .collection("stock")
+                  .doc(stockItem.id)
+                  .update({
+                    quantity: stockItem.quantity - requiredQty,
+                  });
               }
 
               // Registrar a venda no Firestore
@@ -1407,7 +1441,7 @@
                 unitPrice: product.price,
                 total: total,
                 customer: this.saleForm.customer || "Cliente não informado",
-                date: new Date()
+                date: new Date(),
               });
 
               this.saleForm = { productId: "", quantity: 1, customer: "" };
@@ -1424,7 +1458,7 @@
                 description: this.expenseForm.description,
                 amount: parseFloat(this.expenseForm.amount),
                 category: this.expenseForm.category,
-                date: new Date()
+                date: new Date(),
               });
               this.expenseForm = { description: "", amount: 0, category: "" };
               alert("Despesa registrada com sucesso!");
@@ -1450,13 +1484,17 @@
 
               // Filtrar vendas do período
               const periodSales = this.sales.filter((sale) => {
-                const saleDate = sale.date?.toDate ? sale.date.toDate() : new Date(sale.date);
+                const saleDate = sale.date?.toDate
+                  ? sale.date.toDate()
+                  : new Date(sale.date);
                 return saleDate >= startDate && saleDate <= endDate;
               });
 
               // Filtrar despesas do período
               const periodExpenses = this.expenses.filter((expense) => {
-                const expenseDate = expense.date?.toDate ? expense.date.toDate() : new Date(expense.date);
+                const expenseDate = expense.date?.toDate
+                  ? expense.date.toDate()
+                  : new Date(expense.date);
                 return expenseDate >= startDate && expenseDate <= endDate;
               });
 
@@ -1536,11 +1574,15 @@
               doc.setFontSize(12);
               doc.text(`Produtos vendidos: ${this.report.totalSales}`, 20, 70);
               doc.text(`Receita: R$ ${this.report.revenue.toFixed(2)}`, 20, 80);
-              doc.text(`Despesas: R$ ${this.report.expenses.toFixed(2)}`, 20, 90);
               doc.text(
-                `Lucro: R$ ${(this.report.revenue - this.report.expenses).toFixed(
-                  2
-                )}`,
+                `Despesas: R$ ${this.report.expenses.toFixed(2)}`,
+                20,
+                90
+              );
+              doc.text(
+                `Lucro: R$ ${(
+                  this.report.revenue - this.report.expenses
+                ).toFixed(2)}`,
                 20,
                 100
               );
@@ -1565,7 +1607,9 @@
               doc.save(`relatorio-${this.report.period}.pdf`);
             } catch (error) {
               console.error("Erro ao exportar PDF:", error);
-              alert("Erro ao exportar PDF. Verifique se o jsPDF está carregado.");
+              alert(
+                "Erro ao exportar PDF. Verifique se o jsPDF está carregado."
+              );
             }
           },
 
@@ -1586,11 +1630,11 @@
           },
 
           // Computed properties
-         get filteredStock() {
-  return this.stock.filter(item =>
-    item.name?.toLowerCase().includes(this.stockSearch.toLowerCase())
-  );
-},
+          get filteredStock() {
+            return this.stock.filter((item) =>
+              item.name?.toLowerCase().includes(this.stockSearch.toLowerCase())
+            );
+          },
 
           get filteredProducts() {
             return this.products.filter((product) =>
@@ -1618,12 +1662,16 @@
                 type: "sale",
                 description: `${sale.quantity}x ${sale.productName}`,
                 amount: sale.total,
-                date: sale.date?.toDate ? sale.date.toDate() : new Date(sale.date),
+                date: sale.date?.toDate
+                  ? sale.date.toDate()
+                  : new Date(sale.date),
               })),
               ...this.expenses.map((expense) => ({
                 ...expense,
                 type: "expense",
-                date: expense.date?.toDate ? expense.date.toDate() : new Date(expense.date),
+                date: expense.date?.toDate
+                  ? expense.date.toDate()
+                  : new Date(expense.date),
               })),
             ]
               .sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -1638,37 +1686,37 @@
             try {
               // Recarregar estoque
               const stockSnapshot = await db.collection("stock").get();
-              this.stock = stockSnapshot.docs.map(doc => ({ 
-                id: doc.id, 
-                ...doc.data() 
+              this.stock = stockSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
               }));
 
               // Recarregar produtos
               const productsSnapshot = await db.collection("products").get();
-              this.products = productsSnapshot.docs.map(doc => ({ 
-                id: doc.id, 
-                ...doc.data() 
+              this.products = productsSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
               }));
 
               // Recarregar vendas
               const salesSnapshot = await db.collection("sales").get();
-              this.sales = salesSnapshot.docs.map(doc => ({ 
-                id: doc.id, 
-                ...doc.data() 
+              this.sales = salesSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
               }));
 
               // Recarregar despesas
               const expensesSnapshot = await db.collection("expenses").get();
-              this.expenses = expensesSnapshot.docs.map(doc => ({ 
-                id: doc.id, 
-                ...doc.data() 
+              this.expenses = expensesSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
               }));
 
               console.log("Dados atualizados:", {
                 stock: this.stock.length,
                 products: this.products.length,
                 sales: this.sales.length,
-                expenses: this.expenses.length
+                expenses: this.expenses.length,
               });
 
               alert("Dados atualizados com sucesso!");
