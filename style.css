@@ -1439,9 +1439,10 @@ form button {
     text-align: center;
   }
 
-  .logo {
-    height: 4rem; /* Reduz a altura do logo */
-    margin-bottom: 0.5rem;
+  .flower-logo,
+  .flower-icon {
+    width: 6rem; /* Reduz o tamanho do logo */
+    height: 6rem; /* Reduz o tamanho do logo */
   }
 
   .text-logo {
