@@ -7,6 +7,9 @@ body {
   font-size: 16px; /* Definindo um tamanho de fonte base para facilitar a conversão para rem */
 }
 
+::marker {
+  color: transparent;
+}
 /* ===== ⬇SESSÃO DE LOGIN⬇ ===== */
 
 .login-container {
@@ -1390,7 +1393,6 @@ form button {
 }
 
 @media screen and (max-width: 767px) {
-  /* Login Page */
   .login-body {
     display: flex;
     height: auto; /* Altura automática */

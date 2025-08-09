@@ -67,49 +67,52 @@
     </div>
      
     <!-- Main App -->
-<div x-show="user">
-  <header class="header">
-    <div class="logo">
-      <img class="flower-icon" src="logo-b.png" alt="Flower Icon"  />
-    </div>
-     <div class="text-logo">Painel Administrativo</div>
-    <div class="user-info">
-      <span id="header-username">Usuário</span>
+    <main x-show="user" class="main-app-container">
+      <header class="header">
+        <div class="logo">
+          <img class="flower-icon" src="logo-b.png" alt="Flower Icon" />
+        </div>
+        <div class="text-logo">Painel Administrativo</div>
+        <div class="user-info">
+          <span id="header-username">Usuário</span>
+          <button @click="logout()" class="logout-btn">Sair</button>
+        </div>
+      </header>
 
-      <button @click="logout()" class="logout-btn">Sair</button>
-    </div>
-  </header>
-
- <div class="container">
-  <nav class="nav-tabs">
-    <button class="nav-tab" :class="{ active: activeTab === 'estoque' }" @click="activeTab = 'estoque'">
-      <img src="images/estoque.svg" class="icon" alt="Estoque" />
-      Estoque
-    </button>
-
-    <button class="nav-tab" :class="{ active: activeTab === 'produtos' }" @click="activeTab = 'produtos'">
-      <img src="images/produtos.svg" class="icon" alt="Produtos" />
-      Produtos
-    </button>
-
-    <button class="nav-tab" :class="{ active: activeTab === 'producao' }" @click="activeTab = 'producao'">
-      <img src="images/produção.svg" class="icon" alt="Produção" />
-      Produção
-    </button>
-
-    <button class="nav-tab" :class="{ active: activeTab === 'financeiro' }" @click="activeTab = 'financeiro'">
-      <img src="images/financeiro.svg" class="icon" alt="Financeiro" />
-      Financeiro
-    </button>
-
-    <button class="nav-tab" :class="{ active: activeTab === 'relatorios' }" @click="activeTab = 'relatorios'">
-      <img src="images/relatorio.svg" class="icon" alt="Relatórios" />
-      Relatórios
-    </button>
-  </nav>
-</div>
-
-
+      <nav class="nav-tabs-container">
+        <ul class="nav-tabs">
+          <li>
+            <button class="nav-tab" :class="{ active: activeTab === 'estoque' }" @click="activeTab = 'estoque'">
+              <img src="images/estoque.svg" class="icon" alt="Estoque" />
+              Estoque
+            </button>
+          </li>
+          <li>
+            <button class="nav-tab" :class="{ active: activeTab === 'produtos' }" @click="activeTab = 'produtos'">
+              <img src="images/produtos.svg" class="icon" alt="Produtos" />
+              Produtos
+            </button>
+          </li>
+          <li>
+            <button class="nav-tab" :class="{ active: activeTab === 'producao' }" @click="activeTab = 'producao'">
+              <img src="images/produção.svg" class="icon" alt="Produção" />
+              Produção
+            </button>
+          </li>
+          <li>
+            <button class="nav-tab" :class="{ active: activeTab === 'financeiro' }" @click="activeTab = 'financeiro'">
+              <img src="images/financeiro.svg" class="icon" alt="Financeiro" />
+              Financeiro
+            </button>
+          </li>
+          <li>
+            <button class="nav-tab" :class="{ active: activeTab === 'relatorios' }" @click="activeTab = 'relatorios'">
+              <img src="images/relatorio.svg" class="icon" alt="Relatórios" />
+              Relatórios
+            </button>
+          </li>
+        </ul>
+      </nav>
     <!-- Estoque Tab -->
 <div x-show="activeTab === 'estoque'" class="tab-content">
   <h2 class="card-title">Controle de Estoque</h2>
