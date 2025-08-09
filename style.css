@@ -1,0 +1,1659 @@
+/* ====== Estilos gerais do body ====== */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+  font-size: 16px; /* Definindo um tamanho de fonte base para facilitar a conversão para rem */
+}
+
+/* ===== ⬇SESSÃO DE LOGIN⬇ ===== */
+
+.login-container {
+  display: flex;
+  flex-direction: row;
+  width: min(100%, 56.25rem);
+  max-width: 100%;
+  height: auto;
+  background-color: #1f2937;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.image-section {
+  flex: 1;
+  background-image: url("images/sonic.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.form-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #000;
+}
+
+.nome {
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  text-align: center;
+}
+
+.divider {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 40px 0 40px;
+  font-weight: 600;
+  color: #888;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: #ccc;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+form {
+  margin-bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+form button {
+  padding: 10px;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.login-body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #6a80ff 0%, #7c4dba 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== ⬆SESSÃO DE LOGIN⬆ ===== */
+
+/* Container principal do app */
+.main-app-container {
+  max-width: 75rem; /* 1200px / 16px = 75rem */
+  margin: 1.25rem auto; /* 20px / 16px = 1.25rem */
+  background-color: #ffffff;
+  border-radius: 1rem; /* 16px / 16px = 1rem */
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.1); /* 10px / 16px = 0.625rem, 30px / 16px = 1.875rem */
+  padding: 1.25rem; /* 20px / 16px = 1.25rem */
+}
+
+/* Cabeçalho principal */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.0625rem 2rem; /* 1px / 16px = 0.0625rem */
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.15); /* 4px / 16px = 0.25rem, 15px / 16px = 0.9375rem */
+  margin-bottom: 2rem;
+  border-radius: 1.25rem 1.25rem 1.25rem 1.25rem; /* 20px / 16px = 1.25rem */
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  justify-content: flex-start;
+  height: 5.625rem; /* 90px / 16px = 5.625rem */
+}
+
+.text-logo {
+  font-size: 1.5rem;
+  display: flex;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.0625rem; /* 1px / 16px = 0.0625rem */
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+/* Informações do usuário */
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.1rem;
+}
+
+/* Botão Logout (vermelho) */
+.logout-btn {
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(135deg, #f00000 0%, #ff4e50 100%);
+  color: white;
+  border: none;
+  width: 3.75rem; /* 60px / 16px = 3.75rem */
+  padding: 0.5rem 0.75rem; /* 8px / 16px = 0.5rem, 12px / 16px = 0.75rem */
+  border-radius: 0.375rem; /* 6px / 16px = 0.375rem */
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1); /* 2px / 16px = 0.125rem, 5px / 16px = 0.3125rem */
+  margin-left: 0.625rem; /* 10px / 16px = 0.625rem */
+}
+
+/* Efeito hover do botão perigo */
+.logout-btn:hover {
+  background: linear-gradient(135deg, #f00000, #8b0000);
+  transform: translateY(-0.0625rem); /* 1px / 16px = 0.0625rem */
+  opacity: 0.9;
+}
+
+/* Container das abas de navegação */
+.nav-tabs {
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  background: #d4dff0;
+  border-radius: 0.625rem; /* 10px / 16px = 0.625rem */
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.26); /* 2px / 16px = 0.125rem, 10px / 16px = 0.625rem */
+  margin-bottom: 2.5rem;
+  padding: 0.3125rem; /* 5px / 16px = 0.3125rem */
+}
+
+/* Ícones dentro das abas */
+.icon {
+  width: 1.125rem; /* 18px / 16px = 1.125rem */
+  height: 1.125rem; /* 18px / 16px = 1.125rem */
+}
+
+/* Cada aba de navegação */
+.nav-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* 8px / 16px = 0.5rem */
+  flex: 1;
+  padding: 1.1rem;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #555;
+  border-radius: 0.5rem; /* 8px / 16px = 0.5rem */
+  margin: 0 0.125rem; /* 2px / 16px = 0.125rem */
+  width: 10rem;
+}
+
+/* Efeito hover nas abas (exceto ativa) */
+.nav-tab:hover:not(.active) {
+  background: linear-gradient(135deg, #d1d3e8 0%, #acaecf 100%);
+  color: #222;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s ease;
+}
+
+/* Aba ativa */
+.nav-tab.active {
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 100%
+  ); /* Gradiente colorido */
+  color: white; /* Texto branco */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+/* Conteúdo de cada aba */
+.tab-content {
+  background: #f4f7fc;
+  border-radius: 0.75rem; /* 12px / 16px = 0.75rem */
+  padding: 2rem;
+  box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.12); /* 4px / 16px = 0.25rem, 15px / 16px = 0.9375rem */
+}
+
+.produtos-table {
+  background: #f4f7fc; /* Azul bem suave ou quase branco */
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); /* Sombra mais suave e difusa */
+}
+
+/* Título principal dentro do card */
+.card-title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 0.125rem solid #9aaaee88; /* 2px / 16px = 0.125rem */
+  padding-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+/* Card padrão */
+.card {
+  background-color: #fdfdfd;
+  border-radius: 0.625rem; /* 10px / 16px = 0.625rem */
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.05); /* 2px / 16px = 0.125rem, 10px / 16px = 0.625rem */
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 0.0625rem solid #eee; /* 1px / 16px = 0.0625rem */
+}
+
+/* Títulos h3 dentro dos cards */
+.card h3 {
+  font-size: 1.4rem;
+  color: #444;
+  border-left: 0.25rem solid #667eea; /* 4px / 16px = 0.25rem */
+  padding-left: 0.625rem; /* 10px / 16px = 0.625rem */
+  margin-bottom: 1rem;
+}
+
+/* Grupo de formulários para espaçamento */
+.form-group {
+  margin-bottom: 1.2rem; /* Espaço abaixo */
+}
+
+/* Label dentro do formulário */
+.form-group label {
+  display: block; /* Ocupa linha inteira */
+  margin-bottom: 0.6rem; /* Espaço abaixo */
+  font-weight: 600; /* Semi-negrito */
+  color: #666; /* Cinza médio */
+}
+
+/* Campos de formulário */
+.form-control {
+  width: 100%; /* Ocupa 100% da largura do container */
+  padding: 12px 15px; /* Espaçamento interno */
+  border: 1px solid #ddd; /* Borda cinza clara */
+  border-radius: 8px; /* Cantos arredondados */
+  font-size: 1rem; /* Tamanho da fonte */
+  box-sizing: border-box; /* Inclui padding dentro da largura */
+  transition: border-color 0.2s ease; /* Transição suave na borda */
+}
+
+/* Foco nos campos do formulário */
+.form-control:focus {
+  outline: none; /* Remove outline padrão */
+  border-color: #667eea; /* Cor da borda azul */
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); /* Sombra azul leve */
+}
+
+/* === Layout da linha do formulário de estoque === */
+.stock-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto; /* 50% 50% para os dois inputs e o botão automático */
+  align-items: end;
+  gap: 1rem; /* Espaço entre colunas */
+}
+
+/* === Inputs do estoque === */
+.stock-form-control {
+  width: 100%; /* Ajusta para ocupar 100% da coluna */
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.stock-form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+/* === Botão do estoque === */
+.stock-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 0 16px; /* Remove padding vertical e mantém só horizontal */
+  font-size: 0.875rem;
+  cursor: pointer;
+  height: auto; /* Mesma altura do input */
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  width: 100%; /* Preenche toda a coluna */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, #28a745, #218838); /* Gradiente */
+  color: white;
+}
+
+.stock-btn:hover {
+  background: linear-gradient(45deg, #218838, #1e7e34);
+  transform: translateY(-1px);
+}
+
+/* Botões base */
+.btn {
+  padding: 0.75rem 1.25rem; /* Espaçamento interno */
+  border-radius: 8px; /* Cantos arredondados */
+  cursor: pointer; /* Cursor pointer */
+  font-weight: 600; /* Texto semi-negrito */
+  font-size: 1rem; /* Tamanho da fonte */
+  transition: all 0.2s ease; /* Transições suaves */
+  text-align: center; /* Centraliza texto */
+  display: inline-block; /* Mantém tamanho correto */
+}
+
+.card-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Mantém título à esquerda e botão à direita */
+  padding: 10px;
+}
+
+/* Botão primário */
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradiente */
+  color: white; /* Texto branco */
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  text-decoration: none; /* Remove sublinhado */
+  font-weight: 600; /* Semi-negrito */
+  display: flex; /* Flexível para alinhar ícone e texto */
+  gap: 8px; /* Espaço entre ícone e texto */
+  justify-content: center; /* Centraliza conteúdo */
+  align-items: center; /* Centraliza verticalmente */
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  width: 13rem; /* Largura fixa */
+  height: auto; /* Altura fixa */
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px); /* Sobe levemente */
+  opacity: 0.95; /* Dá um efeito de interação */
+}
+
+.btn-primary img {
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin-right: 8px; /* Espaço entre ícone e texto */
+}
+
+/* Botão sucesso (verde) */
+.btn-success {
+  background-color: #28a745; /* Verde */
+  color: white; /* Texto branco */
+  border: none; /* Sem borda */
+}
+
+/* Efeito hover do botão sucesso */
+.btn-success:hover {
+  background-color: #218838; /* Verde mais escuro */
+  transform: translateY(-1px); /* Sobe 1px */
+}
+
+/* -----------------------tudo ok daqui pra cima--------------------------- */
+
+/* === Botões da tabela de estoque === */
+.stock-btn-warning {
+  background: rgba(240, 165, 0, 0.2);
+  color: #f0a500;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(240, 165, 0, 0.4);
+  box-shadow: 0 4px 10px rgba(240, 165, 0, 0.3);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.stock-btn-warning:hover {
+  background: rgba(240, 165, 0, 0.4);
+}
+
+.stock-btn-danger {
+  background: rgba(230, 57, 70, 0.2);
+  color: #e63946;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(230, 57, 70, 0.4);
+  box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.stock-btn-danger:hover {
+  background: rgba(230, 57, 70, 0.4);
+}
+
+.adicionar-btn {
+  margin-top: 1rem;
+  width: auto;
+  width: fit-content;
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  color: white;
+  border: none;
+}
+
+.adicionar-btn:hover {
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  transform: translateY(-1px);
+}
+
+/* === Tabela de estoque === */
+.stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.stock-table th {
+  background-color: #f8f9fa;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.stock-table tbody tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+.stock-table tbody tr:hover {
+  background-color: #f0f2f5;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table th,
+.table td {
+  display: flex;
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+.table tbody tr:hover {
+  background-color: #f0f2f5;
+}
+
+.stock-table th:nth-child(2),
+.stock-table td:nth-child(2) {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.stock-table th:nth-child(3),
+.stock-table td:nth-child(3) {
+  text-align: center;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #333;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  width: 100%;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* Caixa de busca */
+.search-box {
+  width: 100%; /* Largura total */
+  padding: 12px 15px; /* Espaçamento interno */
+  margin-top: 1.5rem; /* Espaço acima */
+  margin-bottom: 1.5rem; /* Espaço abaixo */
+  border: 1px solid #ddd; /* Borda clara */
+  border-radius: 8px; /* Cantos arredondados */
+  font-size: 1rem; /* Fonte padrão */
+  box-sizing: border-box; /* Inclui padding na largura */
+  transition: border-color 0.2s ease; /* Transição suave da borda */
+}
+
+/* Foco na caixa de busca */
+.search-box:focus {
+  outline: none; /* Remove outline padrão */
+  border-color: #667eea; /* Borda azul */
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); /* Sombra azul */
+}
+
+/* Grade de cards estatísticos */
+.stats-grid {
+  display: grid; /* Layout grid */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(200px, 1fr)
+  ); /* Colunas responsivas */
+  gap: 1.5rem; /* Espaçamento entre cards */
+  margin-bottom: 2rem; /* Espaço abaixo */
+}
+
+/* Card estatístico individual */
+.stat-card {
+  background: linear-gradient(
+    135deg,
+    #f0f2f5 0%,
+    #e9ecef 100%
+  ); /* Gradiente sutil */
+  border-radius: 10px; /* Cantos arredondados */
+  padding: 1.5rem; /* Espaçamento interno */
+  text-align: center; /* Centraliza texto */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra leve */
+  border: 1px solid #e0e2e5; /* Borda clara */
+}
+
+/* Valor principal do card */
+.stat-value {
+  font-size: 2.5rem; /* Fonte grande */
+  font-weight: 700; /* Negrito */
+  color: #667eea; /* Cor azul para destaque */
+  margin-bottom: 0.5rem; /* Espaço abaixo */
+}
+
+/* Label do card */
+.stat-label {
+  font-size: 1rem; /* Fonte padrão */
+  color: #777; /* Cinza médio */
+  text-transform: uppercase; /* Letras maiúsculas */
+  letter-spacing: 0.5px; /* Espaçamento entre letras */
+}
+
+/* Estilos para alertas */
+.alert {
+  padding: 1rem 1.5rem; /* Espaçamento interno */
+  border-radius: 8px; /* Cantos arredondados */
+  margin-bottom: 1.5rem; /* Espaço abaixo */
+  font-weight: 500; /* Peso da fonte médio */
+  display: flex; /* Layout flexível */
+  align-items: center; /* Alinha verticalmente */
+  gap: 0.8rem; /* Espaço entre elementos internos */
+}
+
+/* Alerta sucesso */
+.alert-success {
+  background: #d4edda; /* Fundo verde claro */
+  color: #155724; /* Texto verde escuro */
+  border: 1px solid #c3e6cb; /* Borda verde clara */
+}
+
+/* Alerta perigo */
+.alert-danger {
+  background: #f8d7da; /* Fundo vermelho claro */
+  color: #721c24; /* Texto vermelho escuro */
+  border: 1px solid #f5c6cb; /* Borda vermelho claro */
+}
+
+/* Alerta aviso */
+.alert-warning {
+  background: #fff3cd; /* Fundo amarelo claro */
+  color: #856404; /* Texto amarelo escuro */
+  border: 1px solid #ffeaa7; /* Borda amarelo claro */
+}
+
+/* Item de ingrediente */
+.ingredient-item {
+  display: flex; /* Layout flexível em linha */
+  align-items: center; /* Alinhamento vertical */
+  gap: 1rem; /* Espaço entre elementos */
+  padding: 0.8rem; /* Espaçamento interno */
+  border: 1px solid #e1e5e9; /* Borda clara */
+  border-radius: 8px; /* Cantos arredondados */
+  margin-bottom: 0.8rem; /* Espaço abaixo */
+  background-color: #fdfdfd; /* Fundo branco */
+}
+
+/* Inputs e selects dentro de ingredient-item */
+.ingredient-item select,
+.ingredient-item input {
+  padding: 0.8rem; /* Espaçamento interno */
+  border: 1px solid #ccc; /* Borda cinza clara */
+  border-radius: 6px; /* Cantos arredondados */
+  font-size: 0.95rem; /* Fonte um pouco menor */
+}
+
+/* === Campos de formulário da aba Produtos === */
+
+.produtos-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* nome maior que preço */
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.produtos-form-group {
+  margin-bottom: 1rem;
+}
+
+.produtos-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.produtos-form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.produtos-form-control:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* === Botões da aba Produtos === */
+/* Base dos botões da aba Produtos */
+/* Botão Editar - Aba Produtos (baseado no stock-btn-warning) */
+.produtos-btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 0.5rem;
+  align-items: flex-start;
+}
+
+.produtos-btn-save {
+  display: flex;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 150px;
+  height: auto; /* Altura fixa */
+  text-align: center;
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  color: white;
+  border: none;
+}
+
+.produtos-btn-save:hover {
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  transform: translateY(-1px);
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+}
+
+.adicionar-materia-btn {
+  display: flex;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  text-align: center;
+}
+.ingredientes-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ingredientes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.botao-adicionar-container {
+  align-self: flex-start;
+}
+
+.adicionar-materia-btn {
+  background: linear-gradient(to right, #c7c434, #d6d333);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: fit-content; /* Largura fixa */
+  height: auto; /* Altura fixa */
+}
+
+.adicionar-materia-btn:hover {
+  background: linear-gradient(to right, #c7c434, #d6d333);
+  transform: translateY(-1px);
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+}
+.botoes-produto-container {
+  display: flex;
+  gap: 10px; /* Espaço entre os botões */
+  margin-top: 1rem; /* Espaço acima do container de botões */
+  flex-wrap: wrap; /* Quebra em telas pequenas */
+}
+
+.produtos-btn-warning {
+  background: rgba(240, 165, 0, 0.2);
+  color: #f0a500;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(240, 165, 0, 0.4);
+  box-shadow: 0 4px 10px rgba(240, 165, 0, 0.3);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.produtos-btn-warning:hover {
+  background: rgba(240, 165, 0, 0.4);
+}
+
+/* Botão Excluir - Aba Produtos (baseado no stock-btn-danger) */
+.produtos-btn-danger {
+  background: rgba(230, 57, 70, 0.2);
+  color: #e63946;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(230, 57, 70, 0.4);
+  box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.produtos-btn-danger:hover {
+  background: rgba(230, 57, 70, 0.4);
+}
+
+/* === Tabela de produtos === */
+.produtos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.produtos-table th,
+.produtos-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.produtos-table th {
+  background-color: #f8f9fa;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  border-radius: 10px;
+}
+
+.produtos-table tr:hover {
+  background-color: #f0f2f5;
+}
+
+/* === Caixa de busca da aba Produtos === */
+.produtos-search-box {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.produtos-search-box:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* === Card da aba Produtos === */
+.produtos-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.produtos-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* === Itens de ingredientes === */
+.produtos-ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #e1e5e9;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  background: #fdfdfd;
+}
+
+.produtos-ingredient-item input,
+.produtos-ingredient-item select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #e1e5e9;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+/* === Alertas na aba Produtos === */
+.produtos-alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.produtos-alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.produtos-alert-danger {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.produtos-alert-warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+/* Alinha os botões de ação à direita */
+.produtos-actions-header,
+.produtos-actions-cell {
+  text-align: right;
+}
+
+/* Centraliza preço e nome se quiser */
+.produtos-table td:nth-child(2),
+.produtos-table th:nth-child(2) {
+  text-align: center;
+}
+
+/* === Aba Produção (baseada em Produtos) === */
+.producao-tab {
+  background: #f4f7fc;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.producao-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.producao-form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.botoes-producao-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.producao-btn-produzir {
+  display: flex;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  width: 150px;
+  height: auto;
+  text-align: center;
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  color: white;
+  border: none;
+  margin-top: 1rem;
+}
+
+.producao-btn-produzir:hover {
+  background: linear-gradient(135deg, #218838, #3cc576);
+  transform: translateY(-1px);
+}
+
+.status-ok {
+  color: green;
+  margin-left: 8px;
+  font-size: 1.2rem;
+}
+
+.status-erro {
+  color: red;
+  margin-left: 8px;
+  font-size: 1.2rem;
+}
+
+.ingrediente-necessario {
+  background: #fdfdfd;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 0.75rem;
+}
+
+.produto-select {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.quantidade-input {
+  flex: 1 1 40%;
+}
+
+.botoes-producao-container {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ===== Financeiro Tab custom styles ===== */
+
+/* Seção do formulário financeira com duas colunas */
+.form-section-financeiro {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+  gap: 2rem; /* Espaço entre colunas */
+  margin-bottom: 2rem; /* Espaço abaixo */
+}
+
+/* Cores para tipos de transação */
+.type-sale {
+  color: green; /* Vendas em verde */
+}
+
+.type-expense {
+  color: red; /* Despesas em vermelho */
+}
+
+.value-sale {
+  color: green; /* Valores de venda em verde */
+}
+
+.value-expense {
+  color: red; /* Valores de despesa em vermelho */
+}
+
+/* ===== Relatórios Tab custom styles ===== */
+
+/* Filtros organizados em grid com 3 colunas */
+.filters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 100px; /* Duas colunas flex e uma fixa */
+  gap: 1rem; /* Espaçamento */
+  align-items: end; /* Alinha conteúdo ao final verticalmente */
+  margin-bottom: 1rem; /* Espaço abaixo */
+}
+
+/* Cabeçalho do relatório com layout flex */
+.report-header {
+  display: flex;
+  justify-content: space-between; /* Espaço entre elementos */
+  align-items: center; /* Alinhamento vertical */
+  margin-bottom: 2rem; /* Espaço abaixo */
+}
+
+/* Grade com duas colunas para conteúdo */
+.two-columns-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+  gap: 2rem; /* Espaço entre colunas */
+}
+
+/* Aba Financeiro */
+/* Aba Financeiro */
+.financeiro-tab {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Cartões de estatísticas */
+.financeiro-stats-grid {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.financeiro-stat-card {
+  color: #333;
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 180px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, #f0f2f5 0%, #e9ecef 100%);
+}
+
+.financeiro-stat-card .stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.financeiro-stat-card .stat-label {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* Seção de formulários */
+.financeiro-form-section {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.financeiro-card {
+  flex: 1;
+  min-width: 300px;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.financeiro-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.financeiro-card .form-group {
+  margin-bottom: 1rem;
+}
+
+/* Tabela de transações */
+.financeiro-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.financeiro-table th,
+.financeiro-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.financeiro-table th {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.type-sale {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.type-expense {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.value-sale {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.value-expense {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.registrar-venda-btn {
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: inline-block;
+}
+
+.registrar-venda-btn:hover {
+  background: linear-gradient(135deg, #218838, #3cc576);
+  transform: translateY(-1px);
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+}
+
+.registrar-despesa-btn {
+  background: linear-gradient(135deg, #f00000 0%, #ff4e50 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: inline-block;
+}
+
+.registrar-despesa-btn:hover {
+  background: linear-gradient(135deg, #f00000, #8b0000);
+  transform: translateY(-1px);
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+}
+
+/* RELATORIOS */
+.relatorios-tab {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.relatorios-card {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.relatorios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.relatorios-filters-grid {
+  display: flex;
+  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.relatorios-stats-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.relatorios-stat-card {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 180px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.relatorios-stat-card .stat-value {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.relatorios-stat-card .stat-label {
+  font-size: 1rem;
+  color: #666;
+}
+
+.relatorios-duas-colunas {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.relatorios-duas-colunas > div {
+  flex: 1;
+  min-width: 300px;
+}
+
+.relatorios-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.relatorios-table th,
+.relatorios-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.relatorios-table th {
+  background-color: #f0f0f0;
+}
+
+.exportar-pdf-btn {
+  background: linear-gradient(135deg, #25c53f 0%, #44f086 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: inline-block;
+}
+
+.exportar-pdf-btn:hover {
+  background: linear-gradient(135deg, #218838, #3cc576);
+  transform: translateY(-1px);
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+}
+
+.gerar-relatorio-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: inline-block;
+}
+
+.gerar-relatorio-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+@media screen and (max-width: 767px) {
+  /* Login Page */
+  .login-body {
+    display: flex;
+    height: auto; /* Altura automática */
+    min-height: 120vh; /* Altura mínima de 60% da viewport */
+    overflow: hidden;
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    justify-self: center; /* Centraliza o conteúdo horizontalmente */
+    text-align: center;
+  }
+  .login-container {
+    overflow: hidden;
+    display: flex; /* Flexbox para alinhar logo e formulário */
+    flex-direction: column; /* Empilha as seções */
+    height: auto; /* Altura automática */
+    max-width: 95vw; /* Mais largura em telas pequenas */
+  }
+
+  .image-section {
+    display: none; /* Oculta a imagem em telas muito pequenas para focar no formulário */
+  }
+
+  .form-section {
+    padding: 1.5rem; /* Reduz o padding */
+  }
+
+  .divider {
+    margin: 1.5rem 0; /* Reduz o margin */
+  }
+
+  .divider::before,
+  .divider::after {
+    width: 25%; /* Reduz a largura das linhas do divisor */
+  }
+
+  /* Main App Container */
+  .main-app-container {
+    margin: 0.5rem; /* Margem menor nas laterais */
+    padding: 1rem; /* Padding menor */
+  }
+
+  /* Header */
+  .header {
+    flex-direction: column; /* Empilha logo e user-info */
+    padding: 1rem; /* Ajusta padding */
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .logo {
+    height: 4rem; /* Reduz a altura do logo */
+    margin-bottom: 0.5rem;
+  }
+
+  .text-logo {
+    font-size: 1.2rem; /* Reduz o tamanho da fonte do logo */
+  }
+
+  .user-info {
+    flex-direction: column; /* Empilha nome e botão de logout */
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .logout-btn {
+    margin-left: 0; /* Remove margin-left */
+    margin-top: 0.5rem; /* Adiciona margin-top */
+    width: 100%; /* Ocupa a largura total */
+  }
+
+  /* Nav Tabs */
+  .nav-tabs {
+    flex-direction: column; /* Empilha as abas */
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .nav-tab {
+    width: 100%; /* Ocupa a largura total */
+    margin: 0.25rem 0; /* Espaçamento vertical */
+    padding: 0.8rem; /* Reduz padding */
+    font-size: 0.9rem;
+  }
+
+  .nav-tab.active {
+    width: 100%; /* Mantém largura total para a aba ativa */
+  }
+
+  /* Card Title */
+  .card-title {
+    font-size: 1.5rem; /* Reduz o tamanho da fonte do título do card */
+    text-align: center; /* Centraliza o título */
+  }
+
+  .card-header-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem;
+  }
+
+  /* Forms */
+  .stock-form-grid,
+  .produtos-form-grid,
+  .form-section-financeiro,
+  .filters-grid,
+  .two-columns-grid,
+  .relatorios-filters-grid,
+  .relatorios-duas-colunas {
+    grid-template-columns: 1fr; /* Uma coluna em telas pequenas */
+    gap: 1rem; /* Reduz o gap */
+  }
+
+  .stock-btn,
+  .adicionar-btn,
+  .produtos-btn-save,
+  .adicionar-materia-btn,
+  .producao-btn-produzir,
+  .registrar-venda-btn,
+  .registrar-despesa-btn,
+  .exportar-pdf-btn,
+  .gerar-relatorio-btn {
+    width: 100%; /* Botões ocupam a largura total */
+    margin-top: 0.5rem; /* Ajusta margem superior */
+  }
+  .btn-primary {
+    width: 100%;
+    margin: 0 auto; /* Centraliza o botão */
+  }
+  /* Tables */
+  .stock-table,
+  .produtos-table,
+  .financeiro-table,
+  .relatorios-table {
+    display: block; /* Exibe como bloco para melhor responsividade */
+    width: 100%; /* Largura total */
+    justify-items: center;
+    margin-bottom: 1.5rem; /* Espaço abaixo da tabela */
+  }
+
+  .stock-table th {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.625rem; /* Ajusta o padding */
+    font-size: 0.9rem; /* Reduz o tamanho da fonte */
+    font-weight: 700;
+    color: #555;
+    width: 17rem; /* Largura fixa */
+    text-align: center; /* Centraliza o texto */
+    border-radius: 0.5rem; /* Cantos arredondados */
+    border: solid 0.0625rem #eee; /* Borda clara */
+  }
+
+  .stock-table tr {
+    margin: 0.625rem 0; /* Espaçamento entre as linhas */
+    display: flex;
+    flex-direction: column; /* Empilha as células */
+    align-items: center; /* Centraliza horizontalmente */
+    margin-bottom: 0.625rem; /* Espaçamento entre as linhas */
+    border: 0.0625rem solid #eee;
+    width: 18rem; /* Largura fixa */
+    border-radius: 0.5rem; /* Cantos arredondados */
+  }
+  .stcok-tab,
+  .produtos-table tr,
+  .financeiro-table tr,
+  .relatorios-table tr {
+    display: block;
+    margin-bottom: 0.625rem; /* Espaçamento entre as linhas */
+    border: 0.0625rem solid #eee;
+    width: 18rem;
+    border-radius: 0.5rem;
+    justify-items: center;
+  }
+
+  .stock-table td,
+  .produtos-table td,
+  .financeiro-table td,
+  .relatorios-table td {
+    display: block;
+    text-align: right !important; /* Alinha o texto à direita */
+    border-bottom: 0.0625rem solid #eee;
+    position: relative;
+  }
+
+  .stock-table td::before,
+  .produtos-table td::before,
+  .financeiro-table td::before,
+  .relatorios-table td::before {
+    content: attr(data-label); /* Usa o atributo data-label para o cabeçalho */
+    position: absolute;
+    left: 0.625rem;
+    width: 45%;
+    padding-right: 0.625rem;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  /* Stats Grid */
+  .stats-grid,
+  .financeiro-stats-grid,
+  .relatorios-stats-grid {
+    grid-template-columns: 1fr; /* Uma coluna */
+    gap: 1rem;
+  }
+
+  .stat-card,
+  .financeiro-stat-card,
+  .relatorios-stat-card {
+    min-width: auto; /* Remove min-width */
+  }
+
+  .stat-value {
+    font-size: 2rem; /* Reduz o tamanho da fonte do valor */
+  }
+
+  /* Alerts */
+  .alert {
+    flex-direction: column; /* Empilha ícone e texto */
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  /* Produtos Specific */
+  .produtos-ingredient-item {
+    flex-direction: column; /* Empilha os itens de ingrediente */
+    align-items: stretch; /* Estica para preencher a largura */
+    gap: 0.5rem;
+  }
+
+  .produtos-ingredient-item input,
+  .produtos-ingredient-item select {
+    width: 100%; /* Ocupa a largura total */
+  }
+
+  .botoes-produto-container {
+    flex-direction: column; /* Empilha os botões */
+    gap: 0.5rem;
+  }
+
+  .produtos-btn-warning,
+  .produtos-btn-danger {
+    width: 100%; /* Ocupa a largura total */
+  }
+
+  /* Producao Specific */
+  .producao-form-grid {
+    flex-direction: column; /* Empilha os elementos */
+  }
+
+  .produto-select,
+  .quantidade-input {
+    flex: none; /* Remove flex-grow/shrink */
+    width: 100%; /* Ocupa a largura total */
+  }
+
+  .botoes-producao-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
